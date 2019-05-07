@@ -1,15 +1,21 @@
-require 'pry'
-require 'rest-client'
-require 'json'
+require_relative '../config/environment'
 
-latest_res = RestClient.get("https://api.exchangeratesapi.io/latest")
-historical_res = RestClient.get("https://api.exchangeratesapi.io/2010-01-12")
 
-LATEST = JSON.parse(latest_res)
-HISTORICAL = JSON.parse(historical_res)
+
+#
+# latest_res = RestClient.get("https://api.exchangeratesapi.io/latest")
+# historical_res = RestClient.get("https://api.exchangeratesapi.io/2010-01-12")
+#
+# LATEST = JSON.parse(latest_res)
+# HISTORICAL = JSON.parse(historical_res)
 
 # puts LATEST["rates"].flatten
 
+greeting
+
+menu
+
+puts "You did it!"
 
 
 
