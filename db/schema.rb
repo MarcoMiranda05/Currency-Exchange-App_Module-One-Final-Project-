@@ -19,9 +19,8 @@ ActiveRecord::Schema.define(version: 2019_05_03_153609) do
   end
 
   create_table "currencies", force: :cascade do |t|
+    t.string "symbol"
     t.string "name"
-    t.float "rate"
-    t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
