@@ -85,7 +85,7 @@ def checking_all_currencies
    rates_only = result["rates"]
    table_rows = []
    rates_only.each do |symbol, rate|
-     table_rows << [symbol, rate]
+     table_rows << [symbol, rate.round(2)]
    end
    table = TTY::Table.new ["Currency", "Rate"], table_rows
    renderer = TTY::Table::Renderer::ASCII.new(table)
@@ -105,7 +105,7 @@ def checking_specific_currency
     base = RestClient.get("https://api.exchangeratesapi.io/latest?base=#{your_currency}")
     result = JSON.parse(base)
     final_result = result["rates"]["#{target_currency}"]
-  puts "Every #{your_currency} is equal to #{final_result} #{target_currency}"
+  puts "Every #{your_currency} is equal to #{final_result.round(2)} #{target_currency}"
   quit_or_menu
 end
 
@@ -124,7 +124,7 @@ def convertor_app
   puts "How much do you want to convert?"
   value = gets.chomp
   total = final_result.to_f * value.to_f
-  puts "Well done! #{your_currency} #{value} will value #{target_currency} #{total}!"
+  puts "Well done! #{your_currency} #{value} will value #{target_currency} #{total.round(2)}!"
 
   quit_or_menu
 end
