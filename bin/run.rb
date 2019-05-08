@@ -15,6 +15,8 @@ greeting
 
 menu
 
+checking_all_currencies
+
 puts "You did it!"
 
 

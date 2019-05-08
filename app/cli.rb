@@ -18,9 +18,8 @@ def menu
     "Find country by currency",
     "Check your currency rate compared all the others currencies",
     "Check your currency rate compared to a specific currency",
-    "Convert your money"])
+    "Convert your money"], cycle: true)
 end
-
 
 def all_countries
   Country.all.map {|country| country.name}
