@@ -23,36 +23,44 @@ end
 
 
 def all_countries
-  Country.all.map {|country| country.name}
+  Country.all.map {|country| country.name}.sort
+
 end
 
 def all_currencies
   Currency.all.map { |currency|
 
     "#{currency.name} ==> #{currency.symbol}"
-  }
+  }.sort
 end
 
 def find_by_country
   puts "Which country are you looking for?"
   answer = gets.chomp
-  Currencyusage.all.find{|currencyusage| currencyusage.country.name = answer}.currency.name
+  country_found = Currencyusage.all.find{|currencyusage| currencyusage.country.name == "#{answer}"}.currency.name
+  puts country_found
+end
+
+def find_currency_symbol_by_country(country)
+  Currencyusage.all.find{|currencyusage| currencyusage.country.name == country}.currency.symbol
 end
 
 def find_by_currency
   puts "Which currency are you looking for?"
   answer = gets.chomp
-  Currencyusage.all.select{ |currencyusage| currencyusage.currency.name = answer}.map {|currencyusage| currencyusage.country.name}
+  Currencyusage.all.select{ |currencyusage| currencyusage.currency.name == "#{answer}"}.map {|currencyusage| currencyusage.country.name}
 end
 
 def checking_all_currencies
-  puts "Which currency do you want to check?"
+  puts "Which country currency do you want to check?"
 
-   your_currency = gets.chomp
+  country = gets.chomp
+  country_name = find_currency_symbol_by_country("#{country}")
+  your_currency = country_name
 
-   base = RestClient.get("https://api.exchangeratesapi.io/latest?base=#{your_currency}")
+  base = RestClient.get("https://api.exchangeratesapi.io/latest?base=#{your_currency}")
 
-   result = JSON.parse(base)
+  result = JSON.parse(base)
 
    puts "country found"
 
@@ -71,17 +79,44 @@ end
 
 
 def checking_specific_currency
-  puts "Which currency do you want to check?"
+  puts "Which is your home country?"
+  country = gets.chomp
+  country_name = find_currency_symbol_by_country("#{country}")
+  your_currency = country_name
 
-   your_currency = gets.chomp
+  puts "You choose #{your_currency}. Which country currency do you want to compair with?"
+  target_country = gets.chomp
+  target_country_name = find_currency_symbol_by_country("#{target_country}")
+  target_currency = target_country_name
 
-   base = RestClient.get("https://api.exchangeratesapi.io/latest?base=#{your_currency}")
+  base = RestClient.get("https://api.exchangeratesapi.io/latest?base=#{your_currency}")
+  result = JSON.parse(base)
+  #rates_only = result["rates"]
+  # binding.pry
+  final_result = result["rates"]["#{target_currency}"]
+  puts "Every #{your_currency} is equal to #{final_result} #{target_currency}"
+end
 
-   base.select
+def convertor_app
+  puts "Which is your home country?"
+  country = gets.chomp
+  country_name = find_currency_symbol_by_country("#{country}")
+  your_currency = country_name
 
-   result = JSON.parse(base)
+  puts "You choose #{your_currency}. For which country currency do you want to convert?"
+  target_country = gets.chomp
+  target_country_name = find_currency_symbol_by_country("#{target_country}")
+  target_currency = target_country_name
 
-   puts "country found"
+  base = RestClient.get("https://api.exchangeratesapi.io/latest?base=#{your_currency}")
+  result = JSON.parse(base)
+  final_result = result["rates"]["#{target_currency}"]
+
+  puts "How much do you want to convert?"
+  value = gets.chomp
+  total = final_result.to_f * value.to_f
+  puts "Well done! #{your_currency} #{value} will value #{target_currency} #{total}!"
+
 end
   # puts table_rows
 
