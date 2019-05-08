@@ -11,7 +11,23 @@ require_relative '../config/environment'
 
 # puts LATEST["rates"].flatten
 
-greeting
+puts "
+
+Hey there, what is your name?
+
+"
+name = gets.chomp
+# User.find_or_create_by(name: name)
+#
+# $current_user = User.find_by(name: name)
+#
+# if $current_user
+#   puts 'logged in successfully'
+# else
+#   $current_user = User.create(name: name)
+#     puts 'new user created! logged in!'
+# end
+greeting(name)
 
 menu
 
@@ -20,9 +36,17 @@ puts "You did it!"
 
 
 
-
-
-
+#
+# class Copy
+#   def self.convet_your_money
+#     if user.language == "en"
+#     "Convert your money"
+#     elsif user.languae == 'pt'
+#       "obrigado"
+#     end
+#   end
+# end
+#
 
 
 
