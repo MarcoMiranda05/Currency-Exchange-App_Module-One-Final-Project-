@@ -118,3 +118,4 @@ end
 
 create_a_trip
 my_trips
+puts "we are here"
