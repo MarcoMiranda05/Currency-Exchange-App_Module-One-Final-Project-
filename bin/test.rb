@@ -116,4 +116,5 @@ def my_trips
   puts table.render(:unicode, width:150, resize:true)
 end
 
+create_a_trip
 my_trips
