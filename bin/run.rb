@@ -11,12 +11,7 @@ require_relative '../config/environment'
 
 # puts LATEST["rates"].flatten
 
-puts "
 
-Hey there, what is your name?
-
-"
-name = gets.chomp
 # User.find_or_create_by(name: name)
 #
 # $current_user = User.find_by(name: name)
@@ -27,11 +22,19 @@ name = gets.chomp
 #   $current_user = User.create(name: name)
 #     puts 'new user created! logged in!'
 # end
-greeting(name)
+
+
+system "clear"
+money_art
+
+greeting
+sleep(2)
+system "clear"
 
 menu
+system "clear"
 
-puts "You did it!"
+
 
 
 

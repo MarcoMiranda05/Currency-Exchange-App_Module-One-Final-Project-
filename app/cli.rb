@@ -3,6 +3,9 @@ require 'rest-client'
 require 'json'
 require 'tty-prompt'
 require 'tty-table'
+require 'colorize'
+require 'tty-font'
+require 'pastel'
 require 'require_all'
 
 # where are you travelling from
@@ -16,13 +19,18 @@ require 'require_all'
 # you should exchange #{required_home_currency}
 #
 
-def greeting(name)
-  puts "Hello #{name}!
 
-  Welcome to our Amazing Currency Exchange!
+def greeting
+  font = TTY::Font.new(:doom)
+  pastel = Pastel.new
+  puts pastel.black.bold(font.write("MyExchange"))
+  puts "
+
 
   "
 end
+
+
 
 def menu
   prompt = TTY::Prompt.new
@@ -35,38 +43,48 @@ def menu
     "Check all the countries covered by us",
     "Check all the currencies covered by us", "Exit"]
 
-  selection = prompt.select("Choose one option
-
-    ", options, cycle: true)
+  selection = prompt.select("
+  What would you like to do?".colorize(:color => :green, :background => :black), options, cycle: true)
 
     case selection
 
     when "Convert your money"
+      system "clear"
       convertor_app
     when "Check your currency rate compared to a specific currency"
+      system "clear"
       checking_specific_currency
     when "Check your currency rate compared all the others currencies"
+      system "clear"
       checking_all_currencies
     when "Find the currency by country"
+      system "clear"
       find_by_country
     when "Find country by currency"
+      system "clear"
       find_by_currency
     when "Check all the countries covered by us"
+      system "clear"
       all_countries
     when "Check all the currencies covered by us"
+      system "clear"
       all_currencies
     when "Exit"
-      puts "Thanks! See you next time."
+      pastel = Pastel.new
+      puts pastel.black.bold("
+    Thanks! See you next time.
+      " )
+      puts  "
+    [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅]
+      ".colorize(:green)
       exit
     end
-
-
-
 end
 
 def all_countries
   puts Country.all.map {|country| country.name}.sort
   quit_or_menu
+
 end
 
 def all_currencies
@@ -80,7 +98,8 @@ end
 def find_by_country
   prompt = TTY::Prompt.new
   countries = Country.all.map {|country| country.name}.sort
-  user_selection = prompt.select("Which country are you looking for?", countries, filter: true)
+  user_selection = prompt.select("
+  Which country are you looking for?".colorize(:color => :green, :background => :black), countries, filter: true)
 
   puts Currencyusage.all.find{|currencyusage| currencyusage.country.name == "#{user_selection}"}.currency.name
   quit_or_menu
@@ -93,7 +112,8 @@ end
 def find_by_currency
   prompt = TTY::Prompt.new
   currencies = Currency.all.map {|currency| currency.name}.sort
-  user_selection = prompt.select("Which currency are you looking for?", currencies, filter: true)
+  user_selection = prompt.select("
+  Which currency are you looking for?".colorize(:color => :green, :background => :black), currencies, filter: true)
 
   puts Currencyusage.all.select{ |currencyusage| currencyusage.currency.name == "#{user_selection}"}.map {|currencyusage| currencyusage.country.name}
   quit_or_menu
@@ -102,7 +122,8 @@ end
 def checking_all_currencies
   prompt = TTY::Prompt.new
   countries = Country.all.map {|country| country.name}.sort
-  user_selection = prompt.select("Which country currency do you want to check?", countries, filter: true)
+  user_selection = prompt.select("
+  Which country currency do you want to check?".colorize(:color => :green, :background => :black), countries, filter: true)
 
   country_name = find_currency_symbol_by_country("#{user_selection}")
   your_currency = country_name
@@ -123,34 +144,39 @@ end
 def checking_specific_currency
   prompt = TTY::Prompt.new
   countries = Country.all.map {|country| country.name}.sort
-  user_selection = prompt.select("Which is your home country?", countries, filter: true)
+  user_selection = prompt.select("
+  Which is your home country?".colorize(:color => :green, :background => :black), countries, filter: true)
     country_name = find_currency_symbol_by_country("#{user_selection}")
     your_currency = country_name
 
   prompt = TTY::Prompt.new
   countries = Country.all.map {|country| country.name}.sort
-  user_selection = prompt.select("Your currency is #{your_currency}. Which currency do you want to compare with?", countries, filter: true)
+  user_selection = prompt.select("
+  Your currency is #{your_currency}. Which currency do you want to compare with?".colorize(:color => :green, :background => :black), countries, filter: true)
 
     target_country_name = find_currency_symbol_by_country("#{user_selection}")
     target_currency = target_country_name
     base = RestClient.get("https://api.exchangeratesapi.io/latest?base=#{your_currency}")
     result = JSON.parse(base)
     final_result = result["rates"]["#{target_currency}"]
-  puts "Every #{your_currency} is equal to #{final_result.round(2)} #{target_currency}"
+  puts "
+  Every" + " #{your_currency}".colorize(:green) + " is equal to" + " #{final_result.round(2)} #{target_currency}".colorize(:green)
   quit_or_menu
 end
 
 def convertor_app
   prompt = TTY::Prompt.new
   countries = Country.all.map {|country| country.name}.sort
-  user_selection = prompt.select("Which is your home country?", countries, filter: true)
+  user_selection = prompt.select("
+  Which is your home country?".colorize(:color => :green, :background => :black), countries, filter: true)
 
   country_name = find_currency_symbol_by_country("#{user_selection}")
   your_currency = country_name
 
   prompt = TTY::Prompt.new
   countries = Country.all.map {|country| country.name}.sort
-  user_selection = prompt.select("Your currency is #{your_currency}. Which currency do you want to convert to?", countries, filter: true)
+  user_selection = prompt.select("
+  Your currency is #{your_currency}. Which currency do you want to convert to?".colorize(:color => :green, :background => :black), countries, filter: true)
 
   target_country_name = find_currency_symbol_by_country("#{user_selection}")
   target_currency = target_country_name
@@ -158,16 +184,12 @@ def convertor_app
   result = JSON.parse(base)
   final_result = result["rates"]["#{target_currency}"]
   puts "
-
-  How much do you want to convert?
-
-  "
+  How much do you want to convert?".colorize(:color => :green, :background => :black)
   value = gets.chomp
   total = final_result.to_f * value.to_f
-  puts "Great!
-  #{value} #{your_currency} is equal to #{total.round(2)} #{target_currency}!
-
-  "
+  puts "
+  Great!" + "
+  #{value} #{your_currency}".colorize(:green) + " is equal to" + " #{total.round(2)} #{target_currency}".colorize(:green)
 
   quit_or_menu
 end
@@ -176,23 +198,24 @@ end
 def quit_or_menu
   prompt = TTY::Prompt.new
   answer = prompt.select( "
-
-    Would you like to go back to the main menu or exit?
-
-    ",
+  Would you like to go back to the main menu or exit?".colorize(:color => :green, :background => :black),
     ["Main menu",
      "Exit"
     ])
   case answer
 
   when "Main menu"
+    system "clear"
     menu
   when "Exit"
-    puts "
-
+    system "clear"
+    pastel = Pastel.new
+    puts pastel.black.bold("
     Thanks! See you next time.
-
-    "
+    " )
+    puts  "
+    [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅]
+    ".colorize(:green)
     exit
   end
 end
