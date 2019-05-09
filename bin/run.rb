@@ -31,7 +31,7 @@ greeting
 sleep(2)
 system "clear"
 
-menu
+main_menu
 system "clear"
 
 
