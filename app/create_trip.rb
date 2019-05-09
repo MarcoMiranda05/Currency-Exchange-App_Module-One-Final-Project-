@@ -145,6 +145,7 @@ def my_trips
   puts table.render(:unicode, width:150, resize:true)
 end
 
+create_a_trip
 my_trips
 =======
 >>>>>>> 8cca0e2e2f9241a11c13bf668a863b34ecfcca76:app/create_trip.rb
