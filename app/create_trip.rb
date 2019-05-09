@@ -10,7 +10,6 @@ require 'require_all'
 require_relative './cli'
 require_relative '../config/environment'
 
-<<<<<<< HEAD:bin/test.rb
 def top_destinations
   Trip.all.map {|trip| trip.destination_country
   }.group_by{|country| country.name}.map{|country, trips|[country, trips.count]
@@ -36,17 +35,10 @@ def create_a_user
   User.create(name: name, username: username)
 end
 
-def create_a_trip
-
-    puts "Insert you username:"
-    #create user method
-=======
 
 def create_a_trip
 
-    puts "
-  Insert you username:".colorize(:color => :green, :background => :black)
->>>>>>> 8cca0e2e2f9241a11c13bf668a863b34ecfcca76:app/create_trip.rb
+    puts "Insert you username:".colorize(:color => :green, :background => :black)
     username = gets.chomp
     user_name = User.all.find {|user| user.username == "#{username}"}.name
     user_id = User.all.find {|user| user.username == "#{username}"}.id
@@ -118,7 +110,6 @@ def create_a_trip
 
       quit_or_menu
 end
-<<<<<<< HEAD:bin/test.rb
 
 def my_trips
   puts "Insert you username:"
@@ -145,7 +136,4 @@ def my_trips
   puts table.render(:unicode, width:150, resize:true)
 end
 
-create_a_trip
 my_trips
-=======
->>>>>>> 8cca0e2e2f9241a11c13bf668a863b34ecfcca76:app/create_trip.rb
