@@ -23,17 +23,19 @@ def create_a_trip
       puts "
       #{username} doesn't exist."
       prompt = TTY::Prompt.new
-      options = ["Create an account", "Main Menu", "Exit"]
+      options = ["Try again", "Create an account", "Main Menu", "Exit"]
       answer = prompt.select( "
   What would you like to do?".colorize(:color => :green, :background => :black),
         options)
       case answer
 
       when options[0]
-        create_a_user
+        create_a_trip
       when options[1]
-        main_menu
+        create_a_user
       when options[2]
+        main_menu
+      when options[3]
         exit
       end
 
@@ -64,7 +66,7 @@ def create_a_trip
       convertion_rate = result["rates"]["#{destination_currency_symbol}"]
 
     prompt = TTY::Prompt.new
-    hotels = Hotel.all.map {|hotel| hotel.name}
+    hotels = Hotel.all {|hotel| hotel.name}
     accommodation_selection = prompt.select("
   Which kind of accommodation will you stay in?".colorize(:color => :green, :background => :black), hotels, filter: true)
     accommodation_price = Hotel.all.find {|accommodation| accommodation.name == "#{accommodation_selection}"}.price

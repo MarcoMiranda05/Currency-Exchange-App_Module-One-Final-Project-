@@ -9,4 +9,4 @@ ActiveRecord::Base.establish_connection(
 ActiveRecord::Base.logger = nil
 
 require_all 'app'
-require_all 'bin'
+# require_all 'bin'
