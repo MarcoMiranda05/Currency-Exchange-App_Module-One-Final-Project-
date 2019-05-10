@@ -66,7 +66,7 @@ def create_a_trip
       convertion_rate = result["rates"]["#{destination_currency_symbol}"]
 
     prompt = TTY::Prompt.new
-    hotels = Hotel.all {|hotel| hotel.name}
+    hotels = Hotel.all.map {|hotel| hotel.name}
     accommodation_selection = prompt.select("
   Which kind of accommodation will you stay in?".colorize(:color => :green, :background => :black), hotels, filter: true)
     accommodation_price = Hotel.all.find {|accommodation| accommodation.name == "#{accommodation_selection}"}.price
@@ -85,10 +85,9 @@ def create_a_trip
     total_destination_currency = total_home_currency.to_f * convertion_rate.to_f
 
     puts "
-    Great #{user_name}! Your trip to #{destination_country} is now saved to 'My Trips.'
-    You will need a total of" + " #{total_home_currency.round(2)} #{base_currency}".colorize(:color => :green) + ", which be equal to " + "#{total_destination_currency.round(2)} #{destination_currency_symbol}".colorize(:color => :green)
-
-    Trip.create(user_id: user_id,
+    Great #{user.name}! Your trip to #{destination_country} is now saved to 'My Trips.'
+    You will need a total of" + " #{total_home_currency.round(2)} #{base_currency}".colorize(:color => :green) + ", which is equal to " + "#{total_destination_currency.round(2)} #{destination_currency_symbol}".colorize(:color => :green) + "!"
+    Trip.create(user_id: user.id,
       home_country_id: home_country_id,
       destination_country_id: destination_country_id,
       hotel_id: accommodation_id,

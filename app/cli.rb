@@ -35,23 +35,23 @@ end
 def main_menu
   system "clear"
   prompt = TTY::Prompt.new
-  options = ["Create an Account", "Plan a trip", "Conversion Calculator", "Check coverage","Exit"]
+  options = ["Plan a trip", "Conversion Calculator", "Check coverage", "Create an Account", "Exit"]
   selection = prompt.select("
   Main Menu".colorize(:color => :green, :background => :black), options, cycle: true)
 
   case selection
 
   when options[0]
-    create_a_user
-
-  when options[1]
     plan_trip_menu
 
-  when options[2]
+  when options[1]
     conversion_menu
 
-  when options[3]
+  when options[2]
     check_coverage_menu
+
+  when options[3]
+    create_a_user
 
   when options[4]
     system "clear"
@@ -75,7 +75,7 @@ end
 
 def plan_trip_menu
   prompt = TTY::Prompt.new
-  options = ["Create a trip", "My Trips","Top destination",  "Top destination by country COMING SOON!", "Exit"]
+  options = ["Create a trip", "My Trips","Top destinations",  "Top destinations by country COMING SOON!", "Exit"]
   selection = prompt.select("
   What would you like to do?".colorize(:color => :green, :background => :black), options, cycle: true, filter: true)
 
@@ -200,15 +200,32 @@ def check_coverage_menu
 end
 
 def all_countries
+  puts "
+
+Here are all the countries we cover!
+
+  "
+
   puts Country.all.map {|country| country.name}.sort
+
+
   quit_or_menu
 
 end
 
 def all_currencies
+  puts "
+
+Here are all the currencies we cover!
+
+  "
+
+
   puts Currency.all.map { |currency|
     "#{currency.name} ==> #{currency.symbol}"
   }.sort
+
+
   quit_or_menu
 end
 
@@ -219,7 +236,11 @@ def find_by_country
   user_selection = prompt.select("
   Which country are you looking for?".colorize(:color => :green, :background => :black), countries, filter: true)
 
-  puts Currencyusage.all.find{|currencyusage| currencyusage.country.name == "#{user_selection}"}.currency.name
+  puts "
+
+  The currency for #{user_selection} is #{Currencyusage.all.find{|currencyusage| currencyusage.country.name == "#{user_selection}"}.currency.name}
+
+  "
   quit_or_menu
 end
 
@@ -232,6 +253,12 @@ def find_by_currency
   currencies = Currency.all.map {|currency| currency.name}.sort
   user_selection = prompt.select("
   Which currency are you looking for?".colorize(:color => :green, :background => :black), currencies, filter: true)
+
+  puts "
+
+The #{user_selection} is used by:
+
+  "
 
   puts Currencyusage.all.select{ |currencyusage| currencyusage.currency.name == "#{user_selection}"}.map {|currencyusage| currencyusage.country.name}
   quit_or_menu
@@ -314,5 +341,11 @@ end
 
 
 def feature_coming_soon
-  puts  "You'll be able to checkout the top vacation spots for people from your country"
+  puts  "
+
+  Hold tight! Soon you'll be able to checkout the top destinations for people traveling from your country
+
+  "
+
+  quit_or_menu
 end

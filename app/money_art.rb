@@ -9,7 +9,6 @@ require 'pastel'
 
 
 
-
 def money_art
 puts "
 
