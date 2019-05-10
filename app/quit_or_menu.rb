@@ -14,10 +14,10 @@ require_relative '../config/environment'
 
 def quit_or_menu
   prompt = TTY::Prompt.new
-  options = ["Convert money", "Plan a trip", "Check Coverage", "Exit"]
+  options = [ "Convert money", "Plan a trip", "Check Coverage", "Exit"]
   answer = prompt.select( "
   What would you like to do?".colorize(:color => :green, :background => :black),
-    options)
+    options, cycle: true)
   case answer
 
   when options[0]

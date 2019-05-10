@@ -40,9 +40,39 @@ def my_trips
     end
 
     else
-  puts "Welcome, #{user.name}!"
+  puts "
+
+  Welcome, #{user.name}!"
 
   all_my_trips = Trip.all.select {|trip| trip.user.id == user.id}
+
+  if all_my_trips.empty?
+    puts "
+  You have no trips planned!
+
+    ".colorize(:color => :red)
+    prompt = TTY::Prompt.new
+    options = ["Try again", "Plan a trip", "Main Menu", "Exit"]
+    answer = prompt.select( "
+  What would you like to do?".colorize(:color => :green, :background => :black),
+      options)
+    case answer
+
+    when options[0]
+      my_trips
+    when options[1]
+      create_a_trip
+    when options[2]
+      main_menu
+    when options[3]
+      exit
+    end
+
+    else
+
+
+
+
 
   table = TTY::Table.new ["Home", "Destination", "Hotel", "Nights", "Foreign Currency", "Home Currency", "Rated When?"], []
   all_my_trips.select{|trip| trip.home_country && trip.destination_country && trip.hotel }
@@ -58,12 +88,24 @@ def my_trips
       ]
     end
 
+
+  puts "
+
+    Here are all of your planned trips!
+
+  "
   puts table.render(:unicode, width:150, resize:true)
   quit_or_menu
 end
 end
+end
 
 def top_destinations
+puts "
+Here are the top destinations!
+
+"
+
   Trip.all.map {|trip| trip.destination_country  }
   .group_by do |country|
     # binding.pry
