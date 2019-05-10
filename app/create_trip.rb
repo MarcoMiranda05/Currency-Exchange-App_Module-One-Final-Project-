@@ -93,6 +93,12 @@ def create_a_trip
     result = JSON.parse(base)
     convertion_rate = result["rates"]["#{destination_currency_symbol}"]
 
+      destination_currency = find_currency_symbol_by_country("#{destination_country}")
+      destination_currency_symbol = destination_currency
+      base = RestClient.get("https://api.exchangeratesapi.io/latest?base=#{base_currency}")
+      result = JSON.parse(base)
+      convertion_rate = result["rates"]["#{destination_currency_symbol}"]
+
     #assign accomodation method
     prompt = TTY::Prompt.new
     hotels = Hotel.all.map {|hotel| hotel.name}
