@@ -16,17 +16,31 @@ def create_a_trip
     puts "
   Insert you username:".colorize(:color => :green, :background => :black)
     username = gets.chomp
-    user_name = User.all.find {|user| user.username == "#{username}"}.name
-    user_id = User.all.find {|user| user.username == "#{username}"}.id
+    user = User.all.find {|user| user.username == "#{username}"}
 
-    # if user_name
-    # puts "
-    # Welcome, #{user_name}!"
-    # the_rest
-    # else
-    # puts "#{username} doesn't exist. Please try again"
-    # create_a_trip
-    # end
+
+    if !user
+      puts "
+      #{username} doesn't exist."
+      prompt = TTY::Prompt.new
+      options = ["Create an account", "Main Menu", "Exit"]
+      answer = prompt.select( "
+  What would you like to do?".colorize(:color => :green, :background => :black),
+        options)
+      case answer
+
+      when options[0]
+        create_a_user
+      when options[1]
+        main_menu
+      when options[2]
+        exit
+      end
+
+      else
+        puts "
+        Welcome, #{user.name}!"
+    end
 
     prompt = TTY::Prompt.new
     countries = Country.all.map {|country| country.name}.sort

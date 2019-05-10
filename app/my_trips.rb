@@ -32,7 +32,11 @@ def my_trips
         trip.rated_when?.strftime("%b %d, %Y")
       ]
     end
+
+
   puts table.render(:unicode, width:150, resize:true)
+
+  quit_or_menu
 end
 
 # def my_trips

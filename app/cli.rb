@@ -33,29 +33,40 @@ def greeting
 end
 
 def main_menu
+  system "clear"
   prompt = TTY::Prompt.new
-  options = ["Conversion Calculator", "Plan a trip", "See countries and currencies covered", "Exit"]
+  options = ["Create an Account", "Plan a trip", "Conversion Calculator", "Check coverage","Exit"]
   selection = prompt.select("
   Main Menu".colorize(:color => :green, :background => :black), options, cycle: true)
 
   case selection
 
   when options[0]
-    conversion_menu
+    create_a_user
+
   when options[1]
     plan_trip_menu
 
   when options[2]
-    check_coverage_menu
+    conversion_menu
 
   when options[3]
+    check_coverage_menu
+
+  when options[4]
     system "clear"
     pastel = Pastel.new
     puts pastel.black.bold("
+
+
+
   Thanks! See you next time.
     " )
     puts  "
   [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅]
+
+
+
     ".colorize(:green)
     exit
 
@@ -77,17 +88,23 @@ def plan_trip_menu
   when options[1]
     my_trips
   when options[2]
-
+    top_destinations
   when options[3]
     feature_coming_soon
   when options[4]
     system "clear"
     pastel = Pastel.new
     puts pastel.black.bold("
+
+
+
   Thanks! See you next time.
     " )
     puts  "
   [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅]
+
+
+
     ".colorize(:green)
     exit
 
@@ -129,10 +146,16 @@ def conversion_menu
     when options[5]
       pastel = Pastel.new
       puts pastel.black.bold("
+
+
+
     Thanks! See you next time.
       " )
       puts  "
     [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅]
+
+
+
       ".colorize(:green)
       exit
     end
@@ -160,10 +183,16 @@ def check_coverage_menu
   when options[2]
     pastel = Pastel.new
     puts pastel.black.bold("
+
+
+
   Thanks! See you next time.
     " )
     puts  "
   [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅]
+
+
+
     ".colorize(:green)
     exit
 
@@ -288,7 +317,7 @@ def quit_or_menu
   prompt = TTY::Prompt.new
   options = ["Convert money", "Plan a trip", "Check Coverage", "Exit"]
   answer = prompt.select( "
-  Would you like to go back to the main menu or exit?".colorize(:color => :green, :background => :black),
+  What would you like to do?".colorize(:color => :green, :background => :black),
     options)
   case answer
 
@@ -305,10 +334,16 @@ def quit_or_menu
     system "clear"
     pastel = Pastel.new
     puts pastel.black.bold("
+
+
+
     Thanks! See you next time.
     " )
     puts  "
     [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅] [̲̅$̲̅(̲̅ιο̲̅̅)̲̅$̲̅]
+
+
+
     ".colorize(:green)
     exit
   end
@@ -317,4 +352,58 @@ end
 
 def feature_coming_soon
   puts  "You'll be able to checkout the top vacation spots for people from your country"
+end
+
+def top_destinations
+  Trip.all.map {|trip| trip.destination_country
+  }.group_by{|country| country.name}.map{|country, trips|[country, trips.count]
+  }.sort_by{|country| country[1]}.reverse.map{|country| "#{country[1]} - #{country[0]}"
+}.each{|string| puts string}
+end
+
+def create_a_user
+  puts "
+  Let's setup your account!
+  What is your full name?"
+
+  name = gets.chomp
+
+  puts "
+  Now lets define your username:"
+
+  username = gets.chomp
+
+  puts "Great, #{name}! Now you're ready to plan and check your planned trips!"
+
+  User.create(name: name, username: username)
+
+  quit_or_menu
+end
+
+
+
+def my_trips
+  puts "Insert you username:"
+  username = gets.chomp
+  user_name = User.all.find {|user| user.username == "#{username}"}.name
+  user_id = User.all.find {|user| user.username == "#{username}"}.id
+  puts "Welcome, #{user_name}!"
+
+  all_my_trips = Trip.all.select {|trip| trip.user_id == user_id}
+
+  table = TTY::Table.new ["Home", "Destination", "Hotel", "Nights", "Foreign Currency", "Home Currency", "Rated When?"], []
+  all_my_trips.select{|trip| trip.home_country && trip.destination_country && trip.hotel }
+    .each do |trip|
+      table << [
+        trip.home_country.name,
+        trip.destination_country.name,
+        trip.hotel.name,
+        trip.amount_of_nights,
+        trip.total_destination_currency.round(2),
+        trip.total_home_currency.round(2),
+        trip.rated_when?.strftime("%b %d, %Y")
+      ]
+    end
+
+  puts table.render(:unicode, width:150, resize:true)
 end
